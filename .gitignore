@@ -1,0 +1,26 @@
+# Ambiente virtual
+.venv/
+venv/
+
+# Arquivos de saída
+output.txt
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# VSCode
+.vscode/
+
+# Jupyter / Spyder (caso use)
+.ipynb_checkpoints/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
