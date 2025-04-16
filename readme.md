@@ -73,4 +73,4 @@ pdf-word-counter/
 
 ## 📝 Licença
 
-Este projeto é livre para uso educacional ou pessoal. Adicione uma licença oficial se necessário.
+Este projeto está licenciado sob a **MIT License** – veja o arquivo [LICENSE](LICENSE) para mais detalhes.
