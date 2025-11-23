@@ -49,3 +49,4 @@ class SpacyNLPService(INLPService):
 
         return words
 
+

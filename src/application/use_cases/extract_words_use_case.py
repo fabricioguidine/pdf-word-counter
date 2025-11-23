@@ -48,3 +48,4 @@ class ExtractWordsUseCase:
 
         return all_words, errors
 
+

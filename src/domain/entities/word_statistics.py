@@ -22,3 +22,4 @@ class WordStatistics:
             return 0.0
         return len(self.top_words) / self.total_unique_words * 100
 
+

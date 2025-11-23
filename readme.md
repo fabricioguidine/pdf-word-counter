@@ -183,11 +183,11 @@ pdf-word-counter/
 
 ## 🛠️ Technologies
 
-- **[PyPDF2](https://pypi.org/project/PyPDF2/)** - PDF text extraction
-- **[spaCy](https://spacy.io/)** - Natural Language Processing
-  - `en_core_web_sm` - English language model
-  - `pt_core_news_sm` - Portuguese language model
-- **Python 3.8+** - Programming language
+- **[PyPDF2](https://pypi.org/project/PyPDF2/)**: PDF text extraction
+- **[spaCy](https://spacy.io/)**: Natural Language Processing
+  - `en_core_web_sm`: English language model
+  - `pt_core_news_sm`: Portuguese language model
+- **Python 3.8+**: Programming language
 
 ## 🧪 Development
 

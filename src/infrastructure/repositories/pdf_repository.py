@@ -49,3 +49,4 @@ class PDFRepository(IPDFRepository):
             text += page.extract_text() or ""
         return text
 
+
