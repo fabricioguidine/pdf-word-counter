@@ -221,7 +221,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 👤 Author
 
-Fabricio Guidine - [@fabricioguidine](https://github.com/fabricioguidine)
+[@fabricioguidine](https://github.com/fabricioguidine)
 
 ## 🙏 Acknowledgments
 
