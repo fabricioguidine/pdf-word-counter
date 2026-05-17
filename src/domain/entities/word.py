@@ -17,5 +17,3 @@ class Word:
     def __len__(self) -> int:
         """Return the length of the word text."""
         return len(self.text)
-
-

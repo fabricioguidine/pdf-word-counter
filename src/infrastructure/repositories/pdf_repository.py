@@ -1,8 +1,6 @@
 """PDF repository implementation using PyPDF2."""
 
-import os
 from pathlib import Path
-from typing import List
 
 from PyPDF2 import PdfReader
 
@@ -12,7 +10,7 @@ from ...domain.repositories.pdf_repository import IPDFRepository
 class PDFRepository(IPDFRepository):
     """Concrete implementation of PDF repository using PyPDF2."""
 
-    def get_pdf_files(self, folder_path: str) -> List[str]:
+    def get_pdf_files(self, folder_path: str) -> list[str]:
         """Get list of PDF file paths from a folder.
 
         Args:
@@ -48,5 +46,3 @@ class PDFRepository(IPDFRepository):
         for page in reader.pages:
             text += page.extract_text() or ""
         return text
-
-

@@ -1,7 +1,6 @@
 """NLP service interface for text processing."""
 
 from abc import ABC, abstractmethod
-from typing import List
 
 from ..entities.word import Word
 
@@ -10,7 +9,7 @@ class INLPService(ABC):
     """Interface for Natural Language Processing services."""
 
     @abstractmethod
-    def extract_words(self, text: str) -> List[Word]:
+    def extract_words(self, text: str) -> list[Word]:
         """Extract meaningful words from text.
 
         Args:
@@ -20,5 +19,3 @@ class INLPService(ABC):
             List of extracted Word entities.
         """
         pass
-
-

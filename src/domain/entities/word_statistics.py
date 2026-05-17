@@ -1,7 +1,6 @@
 """Word statistics entity representing aggregated word analysis results."""
 
 from dataclasses import dataclass
-from typing import List
 
 from .word_frequency import WordFrequency
 
@@ -12,7 +11,7 @@ class WordStatistics:
 
     total_unique_words: int
     total_words: int
-    top_words: List[WordFrequency]
+    top_words: list[WordFrequency]
     max_frequency: int
 
     @property
@@ -21,5 +20,3 @@ class WordStatistics:
         if self.total_unique_words == 0:
             return 0.0
         return len(self.top_words) / self.total_unique_words * 100
-
-

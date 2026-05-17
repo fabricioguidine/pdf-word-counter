@@ -1,7 +1,5 @@
 """Use case for extracting words from PDF files."""
 
-from typing import List, Tuple
-
 from ...domain.entities.word import Word
 from ...domain.repositories.pdf_repository import IPDFRepository
 from ...domain.services.nlp_service import INLPService
@@ -24,7 +22,7 @@ class ExtractWordsUseCase:
         self._pdf_repository = pdf_repository
         self._nlp_service = nlp_service
 
-    def execute(self, folder_path: str) -> Tuple[List[Word], List[str]]:
+    def execute(self, folder_path: str) -> tuple[list[Word], list[str]]:
         """Extract words from all PDF files in a folder.
 
         Args:
@@ -33,8 +31,8 @@ class ExtractWordsUseCase:
         Returns:
             Tuple of (extracted words, error messages).
         """
-        all_words: List[Word] = []
-        errors: List[str] = []
+        all_words: list[Word] = []
+        errors: list[str] = []
 
         pdf_files = self._pdf_repository.get_pdf_files(folder_path)
 
@@ -47,5 +45,3 @@ class ExtractWordsUseCase:
                 errors.append(f"❌ Erro ao ler {pdf_path}: {e}")
 
         return all_words, errors
-
-

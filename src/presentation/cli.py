@@ -1,6 +1,5 @@
 """Command-line interface for the PDF word counter application."""
 
-import os
 from pathlib import Path
 
 from ..application.use_cases.count_words_use_case import CountWordsUseCase
@@ -42,9 +41,7 @@ class PDFWordCounterCLI:
             pdf_repository=self._pdf_repository,
             nlp_service=self._nlp_service,
         )
-        self._count_words_use_case = CountWordsUseCase(
-            top_percentage=self._top_percentage
-        )
+        self._count_words_use_case = CountWordsUseCase(top_percentage=self._top_percentage)
 
     def run(self) -> None:
         """Execute the word counting process."""
@@ -118,4 +115,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
