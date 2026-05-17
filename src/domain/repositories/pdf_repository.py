@@ -1,14 +1,13 @@
 """PDF repository interface."""
 
 from abc import ABC, abstractmethod
-from typing import List
 
 
 class IPDFRepository(ABC):
     """Interface for PDF document repositories."""
 
     @abstractmethod
-    def get_pdf_files(self, folder_path: str) -> List[str]:
+    def get_pdf_files(self, folder_path: str) -> list[str]:
         """Get list of PDF file paths from a folder.
 
         Args:
@@ -33,5 +32,3 @@ class IPDFRepository(ABC):
             Exception: If PDF cannot be read or processed.
         """
         pass
-
-

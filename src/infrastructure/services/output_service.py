@@ -1,7 +1,6 @@
 """Output service implementation for file writing."""
 
 from pathlib import Path
-from typing import List
 
 from ...domain.services.output_service import IOutputService
 
@@ -9,7 +8,7 @@ from ...domain.services.output_service import IOutputService
 class FileOutputService(IOutputService):
     """Concrete implementation of output service for file writing."""
 
-    def write(self, lines: List[str], output_path: str) -> None:
+    def write(self, lines: list[str], output_path: str) -> None:
         """Write output lines to a file.
 
         Args:
@@ -21,5 +20,3 @@ class FileOutputService(IOutputService):
 
         with open(output_file, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
-
-

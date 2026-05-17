@@ -1,7 +1,6 @@
 """Use case for counting word frequencies and calculating statistics."""
 
 from collections import Counter
-from typing import List
 
 from ...domain.entities.word import Word
 from ...domain.entities.word_frequency import WordFrequency
@@ -19,7 +18,7 @@ class CountWordsUseCase:
         """
         self._top_percentage = top_percentage
 
-    def execute(self, words: List[Word]) -> WordStatistics:
+    def execute(self, words: list[Word]) -> WordStatistics:
         """Count word frequencies and generate statistics.
 
         Args:
@@ -60,5 +59,3 @@ class CountWordsUseCase:
             top_words=top_words,
             max_frequency=max_freq,
         )
-
-

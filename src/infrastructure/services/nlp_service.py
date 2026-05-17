@@ -1,7 +1,5 @@
 """NLP service implementation using spaCy."""
 
-from typing import List
-
 import spacy
 
 from ...domain.entities.word import Word
@@ -19,7 +17,7 @@ class SpacyNLPService(INLPService):
         """
         self._nlp = spacy.load(model_name)
 
-    def extract_words(self, text: str) -> List[Word]:
+    def extract_words(self, text: str) -> list[Word]:
         """Extract meaningful words from text.
 
         Args:
@@ -29,7 +27,7 @@ class SpacyNLPService(INLPService):
             List of extracted Word entities.
         """
         doc = self._nlp(text.lower())
-        words: List[Word] = []
+        words: list[Word] = []
 
         # Extract single words (nouns, proper nouns, verbs)
         single_words = [
@@ -48,5 +46,3 @@ class SpacyNLPService(INLPService):
         words.extend(compound_terms)
 
         return words
-
-

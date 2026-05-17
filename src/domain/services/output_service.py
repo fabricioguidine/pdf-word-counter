@@ -1,14 +1,13 @@
 """Output service interface for writing results."""
 
 from abc import ABC, abstractmethod
-from typing import List
 
 
 class IOutputService(ABC):
     """Interface for output services."""
 
     @abstractmethod
-    def write(self, lines: List[str], output_path: str) -> None:
+    def write(self, lines: list[str], output_path: str) -> None:
         """Write output lines to a file.
 
         Args:
@@ -16,5 +15,3 @@ class IOutputService(ABC):
             output_path: Path to the output file.
         """
         pass
-
-

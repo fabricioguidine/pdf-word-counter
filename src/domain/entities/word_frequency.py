@@ -1,7 +1,6 @@
 """Word frequency entity representing word count and weight."""
 
 from dataclasses import dataclass
-from typing import Optional
 
 from .word import Word
 
@@ -27,5 +26,3 @@ class WordFrequency:
     def __gt__(self, other: "WordFrequency") -> bool:
         """Compare by count for sorting."""
         return self.count > other.count
-
-
