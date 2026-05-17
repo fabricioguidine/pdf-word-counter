@@ -1,7 +1,10 @@
 # PDF Word Counter with Frequency Weighting
 
-[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![CI](https://github.com/fabricioguidine/pdf-word-counter/actions/workflows/ci.yml/badge.svg)](https://github.com/fabricioguidine/pdf-word-counter/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/fabricioguidine/pdf-word-counter/branch/main/graph/badge.svg)](https://codecov.io/gh/fabricioguidine/pdf-word-counter)
+[![Python](https://img.shields.io/badge/Python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Code style: Ruff](https://img.shields.io/badge/code%20style-ruff-46aef7.svg)](https://github.com/astral-sh/ruff)
 [![Architecture](https://img.shields.io/badge/Architecture-Clean-blue.svg)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 
 A Python application that processes PDF files, extracts meaningful words and compound terms using NLP analysis, calculates word frequencies, and generates weighted statistics. Built with **Clean Architecture** principles for maintainability and testability.
