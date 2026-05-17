@@ -43,9 +43,18 @@ Thumbs.db
 # Testing
 .pytest_cache/
 .coverage
+.coverage.*
+coverage.xml
 htmlcov/
+
+# Linters
+.ruff_cache/
 
 # Type checking
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Claude
+CLAUDE.md
+.claude/
