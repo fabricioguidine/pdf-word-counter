@@ -1,17 +1,14 @@
-"""Output service interface for writing results."""
+"""Output service interface for presenting statistics."""
 
 from abc import ABC, abstractmethod
 
+from ..entities.word_statistics import WordStatistics
+
 
 class IOutputService(ABC):
-    """Interface for output services."""
+    """Interface for rendering word statistics to the user."""
 
     @abstractmethod
-    def write(self, lines: list[str], output_path: str) -> None:
-        """Write output lines to a file.
-
-        Args:
-            lines: List of strings to write.
-            output_path: Path to the output file.
-        """
-        pass
+    def display_statistics(self, statistics: WordStatistics) -> None:
+        """Render the analysis results."""
+        ...

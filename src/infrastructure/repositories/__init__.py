@@ -1,5 +1,5 @@
 """Infrastructure repositories module."""
 
-from .pdf_repository import PDFRepository
+from .pdf_repository import PyPdfRepository
 
-__all__ = ["PDFRepository"]
+__all__ = ["PyPdfRepository"]

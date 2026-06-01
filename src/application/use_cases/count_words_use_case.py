@@ -1,61 +1,39 @@
-"""Use case for counting word frequencies and calculating statistics."""
+"""Use case for counting word frequencies in a PDF."""
 
 from collections import Counter
+from pathlib import Path
 
-from ...domain.entities.word import Word
-from ...domain.entities.word_frequency import WordFrequency
-from ...domain.entities.word_statistics import WordStatistics
+from src.application.use_cases.extract_words_use_case import ExtractWordsUseCase
+from src.domain.entities.word_frequency import WordFrequency
+from src.domain.entities.word_statistics import WordStatistics
 
 
 class CountWordsUseCase:
-    """Use case for counting word frequencies and generating statistics."""
+    """Orchestrates extraction + frequency counting for a single PDF."""
 
-    def __init__(self, top_percentage: float = 0.10):
-        """Initialize the use case.
+    def __init__(self, extract_use_case: ExtractWordsUseCase) -> None:
+        self._extract_use_case = extract_use_case
 
-        Args:
-            top_percentage: Percentage of top words to include in results (default: 0.10 = 10%).
-        """
-        self._top_percentage = top_percentage
+    def execute(
+        self,
+        pdf_path: Path,
+        top_n: int = 10,
+        exclude_stopwords: bool = False,
+    ) -> WordStatistics:
+        words, page_count = self._extract_use_case.execute(pdf_path)
 
-    def execute(self, words: list[Word]) -> WordStatistics:
-        """Count word frequencies and generate statistics.
+        if exclude_stopwords:
+            words = [w for w in words if not w.is_stopword]
 
-        Args:
-            words: List of words to analyze.
-
-        Returns:
-            WordStatistics containing aggregated results.
-        """
-        if not words:
-            return WordStatistics(
-                total_unique_words=0,
-                total_words=0,
-                top_words=[],
-                max_frequency=0,
-            )
-
-        word_counts = Counter(word.text for word in words)
-        total_unique = len(word_counts)
-        max_freq = word_counts.most_common(1)[0][1] if word_counts else 0
-
-        weighted_frequencies = [
-            WordFrequency.create(
-                word=Word(text=word_text),
-                count=count,
-                max_frequency=max_freq,
-            )
-            for word_text, count in word_counts.items()
+        counter = Counter(w.text for w in words)
+        top_words = [
+            WordFrequency(word=text, count=count)
+            for text, count in counter.most_common(top_n)
         ]
 
-        weighted_frequencies.sort(key=lambda x: x.count, reverse=True)
-
-        top_n = max(1, int(total_unique * self._top_percentage))
-        top_words = weighted_frequencies[:top_n]
-
         return WordStatistics(
-            total_unique_words=total_unique,
             total_words=len(words),
+            unique_words=len(counter),
+            total_pages=page_count,
             top_words=top_words,
-            max_frequency=max_freq,
         )

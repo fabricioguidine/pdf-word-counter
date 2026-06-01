@@ -1,19 +1,17 @@
-"""Word entity representing a single word or compound term."""
+"""Word entity representing a single token extracted from a document."""
 
 from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
 class Word:
-    """Represents a word or compound term extracted from text."""
+    """A single word token, normalized to lowercase."""
 
     text: str
-    is_compound: bool = False
+    is_stopword: bool = False
 
     def __post_init__(self):
-        """Normalize word text to lowercase."""
         object.__setattr__(self, "text", self.text.lower().strip())
 
     def __len__(self) -> int:
-        """Return the length of the word text."""
         return len(self.text)
