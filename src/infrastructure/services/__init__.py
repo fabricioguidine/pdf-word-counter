@@ -1,6 +1,6 @@
 """Infrastructure services module."""
 
-from .nlp_service import SpacyNLPService
-from .output_service import FileOutputService
+from .nlp_service import SpacyNlpService
+from .output_service import ConsoleOutputService
 
-__all__ = ["FileOutputService", "SpacyNLPService"]
+__all__ = ["ConsoleOutputService", "SpacyNlpService"]
