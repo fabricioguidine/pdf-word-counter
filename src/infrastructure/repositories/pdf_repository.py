@@ -1,48 +1,25 @@
-"""PDF repository implementation using PyPDF2."""
-
+"""Concrete implementation of the PDF repository using pypdf."""
 from pathlib import Path
 
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 
-from ...domain.repositories.pdf_repository import IPDFRepository
+from src.domain.repositories.pdf_repository import PdfRepository
 
 
-class PDFRepository(IPDFRepository):
-    """Concrete implementation of PDF repository using PyPDF2."""
+class PyPdfRepository(PdfRepository):
+    """PDF repository implementation using the pypdf library."""
 
-    def get_pdf_files(self, folder_path: str) -> list[str]:
-        """Get list of PDF file paths from a folder.
-
-        Args:
-            folder_path: Path to the folder containing PDF files.
-
-        Returns:
-            List of PDF file paths.
-        """
-        folder = Path(folder_path)
-        if not folder.exists():
-            return []
-
-        return [
-            str(pdf_file)
-            for pdf_file in folder.iterdir()
-            if pdf_file.is_file() and pdf_file.suffix.lower() == ".pdf"
-        ]
-
-    def extract_text(self, pdf_path: str) -> str:
-        """Extract text content from a PDF file.
-
-        Args:
-            pdf_path: Path to the PDF file.
-
-        Returns:
-            Extracted text content.
-
-        Raises:
-            Exception: If PDF cannot be read or processed.
-        """
-        reader = PdfReader(pdf_path)
-        text = ""
+    def extract_text(self, pdf_path: Path) -> str:
+        """Extract raw text from a PDF file."""
+        reader = PdfReader(str(pdf_path))
+        text_parts = []
         for page in reader.pages:
-            text += page.extract_text() or ""
-        return text
+            text = page.extract_text()
+            if text:
+                text_parts.append(text)
+        return "\n".join(text_parts)
+
+    def get_page_count(self, pdf_path: Path) -> int:
+        """Return the number of pages in the PDF."""
+        reader = PdfReader(str(pdf_path))
+        return len(reader.pages)
