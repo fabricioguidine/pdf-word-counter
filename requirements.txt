@@ -2,6 +2,9 @@
 pypdf>=4.0
 # spaCy 3.8.7+ supports Python 3.11-3.13.
 spacy>=3.8.7,<3.9
+# spaCy imports click (via typer) at import time; pin explicitly so it is
+# always resolved on every OS/Python combo.
+click>=8.1
 
 # spaCy English model, pinned as a direct wheel so CI installs it
 # deterministically instead of relying on a runtime download.
