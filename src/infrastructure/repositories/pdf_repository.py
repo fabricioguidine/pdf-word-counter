@@ -3,10 +3,10 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
-from src.domain.repositories.pdf_repository import PdfRepository
+from src.domain.repositories.pdf_repository import IPDFRepository
 
 
-class PyPdfRepository(PdfRepository):
+class PyPdfRepository(IPDFRepository):
     """PDF repository implementation using the pypdf library."""
 
     def extract_text(self, pdf_path: Path) -> str:

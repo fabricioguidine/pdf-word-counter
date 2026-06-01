@@ -1,4 +1,4 @@
-"""NLP service interface for text processing."""
+"""NLP service interface for tokenizing text into words."""
 
 from abc import ABC, abstractmethod
 
@@ -10,12 +10,5 @@ class INLPService(ABC):
 
     @abstractmethod
     def extract_words(self, text: str) -> list[Word]:
-        """Extract meaningful words from text.
-
-        Args:
-            text: Input text to process.
-
-        Returns:
-            List of extracted Word entities.
-        """
-        pass
+        """Tokenize text into a list of Word entities (in order)."""
+        ...

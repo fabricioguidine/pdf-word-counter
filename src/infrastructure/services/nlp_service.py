@@ -6,43 +6,18 @@ from ...domain.entities.word import Word
 from ...domain.services.nlp_service import INLPService
 
 
-class SpacyNLPService(INLPService):
-    """Concrete implementation of NLP service using spaCy."""
+class SpacyNlpService(INLPService):
+    """Tokenizes text into alphabetic words using a spaCy pipeline."""
 
     def __init__(self, model_name: str = "en_core_web_sm"):
-        """Initialize the NLP service with a spaCy model.
-
-        Args:
-            model_name: Name of the spaCy model to load (default: "en_core_web_sm").
-        """
-        self._nlp = spacy.load(model_name)
+        # Only the tokenizer + a stopword/lexeme lookup are needed; disabling
+        # the heavy components keeps per-call cost low and behavior stable.
+        self._nlp = spacy.load(model_name, disable=["parser", "ner", "tagger", "lemmatizer"])
 
     def extract_words(self, text: str) -> list[Word]:
-        """Extract meaningful words from text.
-
-        Args:
-            text: Input text to process.
-
-        Returns:
-            List of extracted Word entities.
-        """
-        doc = self._nlp(text.lower())
+        doc = self._nlp(text)
         words: list[Word] = []
-
-        # Extract single words (nouns, proper nouns, verbs)
-        single_words = [
-            Word(text=token.text, is_compound=False)
-            for token in doc
-            if token.pos_ in ("NOUN", "PROPN", "VERB") and len(token.text) > 2
-        ]
-        words.extend(single_words)
-
-        # Extract compound terms (noun chunks with multiple words)
-        compound_terms = [
-            Word(text=chunk.text, is_compound=True)
-            for chunk in doc.noun_chunks
-            if len(chunk.text.split()) > 1
-        ]
-        words.extend(compound_terms)
-
+        for token in doc:
+            if token.is_alpha:
+                words.append(Word(text=token.text, is_stopword=token.is_stop))
         return words
