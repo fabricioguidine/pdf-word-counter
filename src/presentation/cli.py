@@ -1,117 +1,72 @@
-"""Command-line interface for the PDF word counter application."""
-
+"""Command-line interface for the PDF Word Counter."""
+import argparse
+import sys
 from pathlib import Path
 
-from ..application.use_cases.count_words_use_case import CountWordsUseCase
-from ..application.use_cases.extract_words_use_case import ExtractWordsUseCase
-from ..infrastructure.repositories.pdf_repository import PDFRepository
-from ..infrastructure.services.nlp_service import SpacyNLPService
-from ..infrastructure.services.output_service import FileOutputService
+from src.application.use_cases.count_words_use_case import CountWordsUseCase
+from src.application.use_cases.extract_words_use_case import ExtractWordsUseCase
+from src.infrastructure.repositories.pdf_repository import PyPdfRepository
+from src.infrastructure.services.nlp_service import SpacyNlpService
+from src.infrastructure.services.output_service import ConsoleOutputService
 
 
-class PDFWordCounterCLI:
-    """Command-line interface for PDF word counting."""
+def _force_utf8_stdout() -> None:
+    """Force UTF-8 console output so PDF text with non-ASCII chars prints on any OS.
 
-    def __init__(
-        self,
-        pdf_folder: str = "sample_pdfs",
-        output_file: str = "output.txt",
-        nlp_model: str = "en_core_web_sm",
-        top_percentage: float = 0.10,
-    ):
-        """Initialize the CLI with configuration.
-
-        Args:
-            pdf_folder: Path to folder containing PDF files.
-            output_file: Path to output file for results.
-            nlp_model: spaCy model name to use.
-            top_percentage: Percentage of top words to include (default: 0.10 = 10%).
-        """
-        self._pdf_folder = pdf_folder
-        self._output_file = output_file
-        self._top_percentage = top_percentage
-
-        # Initialize dependencies
-        self._pdf_repository = PDFRepository()
-        self._nlp_service = SpacyNLPService(model_name=nlp_model)
-        self._output_service = FileOutputService()
-
-        # Initialize use cases
-        self._extract_words_use_case = ExtractWordsUseCase(
-            pdf_repository=self._pdf_repository,
-            nlp_service=self._nlp_service,
-        )
-        self._count_words_use_case = CountWordsUseCase(top_percentage=self._top_percentage)
-
-    def run(self) -> None:
-        """Execute the word counting process."""
-        output_lines: list[str] = []
-
-        # Get PDF files info
-        pdf_files = self._pdf_repository.get_pdf_files(self._pdf_folder)
-        if not pdf_files:
-            output_lines.append("⚠️ Nenhum arquivo PDF encontrado na pasta.")
-            self._output_service.write(output_lines, self._output_file)
-            return
-
-        # Extract words from PDFs
-        words, errors = self._extract_words_use_case.execute(self._pdf_folder)
-
-        # Add file processing info (count words per file)
-        file_word_counts: dict[str, int] = {}
-        for pdf_path in pdf_files:
-            try:
-                text = self._pdf_repository.extract_text(pdf_path)
-                file_words = self._nlp_service.extract_words(text)
-                file_name = Path(pdf_path).name
-                file_word_counts[file_name] = len(file_words)
-            except Exception:
-                pass  # Error already handled in use case
-
-        for file_name, count in file_word_counts.items():
-            output_lines.append(f"{file_name}: {count} palavras úteis")
-
-        # Add errors if any
-        output_lines.extend(errors)
-
-        # Count words and generate statistics
-        statistics = self._count_words_use_case.execute(words)
-
-        if statistics.total_unique_words == 0:
-            output_lines.append("⚠️ Nenhuma palavra útil encontrada nos PDFs.")
-            self._output_service.write(output_lines, self._output_file)
-            return
-
-        # Format output
-        output_lines.append(f"\n🔢 Palavras únicas úteis: {statistics.total_unique_words}")
-        output_lines.append(
-            f"\n🏆 Top {len(statistics.top_words)} palavras mais frequentes (com pesos):\n"
-        )
-
-        for i, word_freq in enumerate(statistics.top_words, start=1):
-            line = (
-                f"{i:02d}. {word_freq.word.text:<25} → "
-                f"{word_freq.count:>4}x | peso: {word_freq.weight:.2f}"
-            )
-            output_lines.append(line)
-
-        # Write output
-        self._output_service.write(output_lines, self._output_file)
+    On Windows the default console encoding is often cp1252, which raises
+    UnicodeEncodeError when printing tokens extracted from a PDF.
+    """
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8")
 
 
-def main():
-    """Main entry point for the CLI application."""
-    # Get the project root directory
-    project_root = Path(__file__).parent.parent.parent
-    pdf_folder = project_root / "sample_pdfs"
-    output_file = project_root / "output.txt"
-
-    cli = PDFWordCounterCLI(
-        pdf_folder=str(pdf_folder),
-        output_file=str(output_file),
+def create_parser() -> argparse.ArgumentParser:
+    """Create and configure the argument parser."""
+    parser = argparse.ArgumentParser(
+        description="Count words in a PDF file using NLP processing.",
     )
-    cli.run()
+    parser.add_argument(
+        "pdf_path",
+        type=str,
+        help="Path to the PDF file to analyze.",
+    )
+    parser.add_argument(
+        "--top",
+        type=int,
+        default=10,
+        help="Number of top frequent words to display (default: 10).",
+    )
+    parser.add_argument(
+        "--no-stopwords",
+        action="store_true",
+        help="Exclude stopwords from the analysis.",
+    )
+    return parser
 
 
-if __name__ == "__main__":
-    main()
+def main() -> None:
+    """Main entry point for the CLI."""
+    _force_utf8_stdout()
+    parser = create_parser()
+    args = parser.parse_args()
+
+    pdf_path = Path(args.pdf_path)
+    if not pdf_path.exists():
+        print(f"Error: File not found: {pdf_path}", file=sys.stderr)
+        sys.exit(1)
+
+    repository = PyPdfRepository()
+    nlp_service = SpacyNlpService()
+    output_service = ConsoleOutputService()
+
+    extract_use_case = ExtractWordsUseCase(repository, nlp_service)
+    count_use_case = CountWordsUseCase(extract_use_case)
+
+    statistics = count_use_case.execute(
+        pdf_path,
+        top_n=args.top,
+        exclude_stopwords=args.no_stopwords,
+    )
+    output_service.display_statistics(statistics)
