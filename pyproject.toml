@@ -21,7 +21,7 @@ classifiers = [
 ]
 dependencies = [
     "PyPDF2==3.0.1",
-    "spacy==3.8.5",
+    "spacy==3.8.14",
 ]
 
 [project.optional-dependencies]
